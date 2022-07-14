@@ -7,12 +7,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/user/user.model';
 import { JwtService } from '@nestjs/jwt';
-// import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
-    // private config: ConfigService,
+    private config: ConfigService,
     @InjectModel('User') private userModel: Model<User>,
     private jwt: JwtService,
   ) {}
@@ -46,12 +46,12 @@ export class AuthService {
     return this.signToken(user.id);
   }
 
-  async signToken(userId) {
+  async signToken(userId) : Promise<{accessToken : string}> {
     const payload = { sub: userId };
-    // const key = this.config.get('JWT_SECRET')
+    const key = this.config.get('JWT_SECRET')
     const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
-      secret: 'super-duper-secret-key',
+      secret:  key,
     });
 
     return{accessToken: token}
