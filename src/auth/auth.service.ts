@@ -30,7 +30,8 @@ export class AuthService {
     });
     await newuser.save();
     // delete newuser.password;
-    return this.signToken(newuser.id);
+    // return this.signToken(newuser.id);
+    return "signup successful";
   }
 
   async login(dto: AuthDto) {
